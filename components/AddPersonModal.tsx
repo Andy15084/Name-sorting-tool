@@ -124,19 +124,20 @@ export default function AddPersonModal({
   );
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-4xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-peach-500 px-8 py-5 flex justify-between items-center rounded-t-4xl z-10">
-          <h2 className="text-2xl font-bold text-white">Add New Contact</h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
+      <div className="bg-white rounded-3xl sm:rounded-4xl shadow-2xl w-full max-w-3xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-peach-500 px-4 sm:px-8 py-4 sm:py-5 flex justify-between items-center rounded-t-3xl sm:rounded-t-4xl z-10">
+          <h2 className="text-lg sm:text-2xl font-bold text-white">Add New Contact</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/20 rounded-full transition-all duration-200"
+            title="Close"
           >
-            <X className="w-6 h-6 text-white" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-8 space-y-4 sm:space-y-6">
           {/* Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -147,7 +148,7 @@ export default function AddPersonModal({
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200"
+              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-gray-900"
               placeholder="Enter full name"
               required
             />
@@ -163,7 +164,7 @@ export default function AddPersonModal({
               type="date"
               value={formData.dateOfBirth}
               onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200"
+              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-gray-900"
               required
             />
           </div>
@@ -177,7 +178,7 @@ export default function AddPersonModal({
               id="whenWeMet"
               value={formData.whenWeMet}
               onChange={(e) => setFormData({ ...formData, whenWeMet: e.target.value })}
-              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none resize-none transition-all duration-200"
+              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none resize-none transition-all duration-200 text-gray-900"
               placeholder="Describe how and when you met..."
               rows={3}
               required
@@ -198,7 +199,7 @@ export default function AddPersonModal({
                 setShowSchoolSuggestions(e.target.value.length > 0);
               }}
               onFocus={() => setShowSchoolSuggestions(formData.school.length > 0)}
-              className="w-full px-5 py-3.5 border-2 border-sage-200 rounded-3xl focus:ring-2 focus:ring-sage-400 focus:border-sage-400 outline-none transition-all duration-200"
+              className="w-full px-5 py-3.5 border-2 border-sage-200 rounded-3xl focus:ring-2 focus:ring-sage-400 focus:border-sage-400 outline-none transition-all duration-200 text-gray-900"
               placeholder="Enter school name"
             />
             
@@ -262,7 +263,7 @@ export default function AddPersonModal({
                 <select
                   value={newContact.type}
                   onChange={(e) => setNewContact({ ...newContact, type: e.target.value as 'email' | 'phone' })}
-                  className="w-full px-4 py-2.5 border-2 border-blue-200 rounded-3xl outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-2.5 border-2 border-blue-200 rounded-3xl outline-none focus:ring-2 focus:ring-blue-400 text-gray-900"
                 >
                   <option value="email">Email</option>
                   <option value="phone">Phone Number</option>
@@ -273,7 +274,7 @@ export default function AddPersonModal({
                     value={newContact.value}
                     onChange={(e) => setNewContact({ ...newContact, value: e.target.value })}
                     placeholder={newContact.type === 'email' ? 'Enter email address' : 'Enter phone number'}
-                    className="flex-1 px-5 py-2.5 border-2 border-blue-200 rounded-3xl focus:ring-2 focus:ring-blue-400 outline-none"
+                    className="flex-1 px-5 py-2.5 border-2 border-blue-200 rounded-3xl focus:ring-2 focus:ring-blue-400 outline-none text-gray-900"
                   />
                   <button
                     type="button"
@@ -339,7 +340,7 @@ export default function AddPersonModal({
                 <select
                   value={newSocial.platform}
                   onChange={(e) => setNewSocial({ ...newSocial, platform: e.target.value })}
-                  className="w-full px-4 py-2.5 border-2 border-purple-200 rounded-3xl outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full px-4 py-2.5 border-2 border-purple-200 rounded-3xl outline-none focus:ring-2 focus:ring-purple-400 text-gray-900"
                 >
                   {socialPlatforms.map((platform) => (
                     <option key={platform} value={platform}>
@@ -353,7 +354,7 @@ export default function AddPersonModal({
                     value={newSocial.url}
                     onChange={(e) => setNewSocial({ ...newSocial, url: e.target.value })}
                     placeholder="Enter profile URL"
-                    className="flex-1 px-5 py-2.5 border-2 border-purple-200 rounded-3xl focus:ring-2 focus:ring-purple-400 outline-none"
+                    className="flex-1 px-5 py-2.5 border-2 border-purple-200 rounded-3xl focus:ring-2 focus:ring-purple-400 outline-none text-gray-900"
                   />
                   <button
                     type="button"
@@ -386,7 +387,7 @@ export default function AddPersonModal({
               id="professionText"
               value={formData.professionText}
               onChange={(e) => setFormData({ ...formData, professionText: e.target.value })}
-              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none resize-none transition-all duration-200"
+              className="w-full px-5 py-3.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none resize-none transition-all duration-200 text-gray-900"
               placeholder="Describe their profession..."
               rows={2}
             />
@@ -431,7 +432,7 @@ export default function AddPersonModal({
                   value={newProfessionInput}
                   onChange={(e) => setNewProfessionInput(e.target.value)}
                   placeholder="Enter new profession"
-                  className="flex-1 px-5 py-2.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200"
+                  className="flex-1 px-5 py-2.5 border-2 border-peach-200 rounded-3xl focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-gray-900"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();

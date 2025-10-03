@@ -8,9 +8,10 @@ interface PersonProfileModalProps {
   person: Person;
   onClose: () => void;
   onUpdate: (updatedPerson: Person) => void;
+  onDelete: (personId: string) => void;
 }
 
-export default function PersonProfileModal({ person, onClose, onUpdate }: PersonProfileModalProps) {
+export default function PersonProfileModal({ person, onClose, onUpdate, onDelete }: PersonProfileModalProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPerson, setEditedPerson] = useState<Person>({
     ...person,
@@ -30,6 +31,13 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
     setIsEditing(false);
     setShowAddContact(false);
     setShowAddSocial(false);
+  };
+
+  const handleDelete = () => {
+    if (confirm(`Are you sure you want to delete ${editedPerson.name}? This action cannot be undone.`)) {
+      onDelete(editedPerson.id);
+      onClose();
+    }
   };
 
   const handleAddContactInfo = () => {
@@ -106,47 +114,58 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-4xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
+      <div className="bg-white rounded-3xl sm:rounded-4xl shadow-2xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-peach-400 to-sage-400 px-8 py-6 flex justify-between items-center rounded-t-4xl z-10">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-peach-600 font-bold text-2xl shadow-lg">
+        <div className="sticky top-0 bg-gradient-to-r from-peach-400 to-sage-400 px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center rounded-t-3xl sm:rounded-t-4xl z-10">
+          <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center text-peach-600 font-bold text-lg sm:text-2xl shadow-lg flex-shrink-0">
               {editedPerson.name.charAt(0).toUpperCase()}
             </div>
-            <div>
-              <h2 className="text-2xl font-bold text-white">{editedPerson.name}</h2>
-              <p className="text-white/90 text-sm">Contact Profile</p>
+            <div className="min-w-0">
+              <h2 className="text-lg sm:text-2xl font-bold text-white truncate">{editedPerson.name}</h2>
+              <p className="text-white/90 text-xs sm:text-sm">Contact Profile</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             {!isEditing ? (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-200"
-              >
-                <Edit2 className="w-5 h-5 text-white" />
-              </button>
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-200"
+                  title="Edit"
+                >
+                  <Edit2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="p-2 bg-red-500/80 hover:bg-red-600 rounded-full transition-all duration-200"
+                  title="Delete"
+                >
+                  <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                </button>
+              </>
             ) : (
               <button
                 onClick={handleSave}
-                className="flex items-center gap-2 px-4 py-2 bg-white text-sage-600 hover:bg-white/90 rounded-full transition-all duration-200 font-semibold"
+                className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white text-sage-600 hover:bg-white/90 rounded-full transition-all duration-200 font-semibold text-sm"
               >
-                <Save className="w-4 h-4" />
-                Save
+                <Save className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Save</span>
               </button>
             )}
             <button
               onClick={onClose}
               className="p-2 hover:bg-white/20 rounded-full transition-all duration-200"
+              title="Close"
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-8 space-y-6">
+        <div className="p-4 sm:p-8 space-y-4 sm:space-y-6">
           {/* Basic Information */}
           <div className="bg-peach-50 rounded-3xl p-5 border border-peach-200">
             <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -162,7 +181,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                       type="text"
                       value={editedPerson.name}
                       onChange={(e) => setEditedPerson({ ...editedPerson, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm text-gray-900"
                     />
                   </div>
                   <div>
@@ -171,7 +190,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                       type="date"
                       value={editedPerson.dateOfBirth}
                       onChange={(e) => setEditedPerson({ ...editedPerson, dateOfBirth: e.target.value })}
-                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm text-gray-900"
                     />
                   </div>
                   <div>
@@ -180,7 +199,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                       type="text"
                       value={editedPerson.school || ''}
                       onChange={(e) => setEditedPerson({ ...editedPerson, school: e.target.value })}
-                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm text-gray-900"
                     />
                   </div>
                   <div>
@@ -188,7 +207,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                     <textarea
                       value={editedPerson.whenWeMet}
                       onChange={(e) => setEditedPerson({ ...editedPerson, whenWeMet: e.target.value })}
-                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm resize-none"
+                      className="w-full px-3 py-2 border border-peach-300 rounded-2xl focus:ring-2 focus:ring-peach-400 outline-none text-sm resize-none text-gray-900"
                       rows={3}
                     />
                   </div>
@@ -273,7 +292,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                     <select
                       value={newContactInfo.type}
                       onChange={(e) => setNewContactInfo({ ...newContactInfo, type: e.target.value as 'email' | 'phone' })}
-                      className="w-full px-3 py-2 border border-blue-300 rounded-2xl outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                      className="w-full px-3 py-2 border border-blue-300 rounded-2xl outline-none focus:ring-2 focus:ring-blue-400 text-sm text-gray-900"
                     >
                       <option value="email">Email</option>
                       <option value="phone">Phone Number</option>
@@ -284,7 +303,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                         value={newContactInfo.value}
                         onChange={(e) => setNewContactInfo({ ...newContactInfo, value: e.target.value })}
                         placeholder={newContactInfo.type === 'email' ? 'Enter email' : 'Enter phone number'}
-                        className="flex-1 px-3 py-2 border border-blue-300 rounded-2xl focus:ring-2 focus:ring-blue-400 outline-none text-sm"
+                        className="flex-1 px-3 py-2 border border-blue-300 rounded-2xl focus:ring-2 focus:ring-blue-400 outline-none text-sm text-gray-900"
                       />
                       <button
                         onClick={handleAddContactInfo}
@@ -322,7 +341,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                   <textarea
                     value={editedPerson.professionText || ''}
                     onChange={(e) => setEditedPerson({ ...editedPerson, professionText: e.target.value })}
-                    className="w-full px-3 py-2 border border-sage-300 rounded-2xl focus:ring-2 focus:ring-sage-400 outline-none text-sm resize-none"
+                    className="w-full px-3 py-2 border border-sage-300 rounded-2xl focus:ring-2 focus:ring-sage-400 outline-none text-sm resize-none text-gray-900"
                     rows={2}
                   />
                 </div>
@@ -420,7 +439,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                     <select
                       value={newSocialInfo.platform}
                       onChange={(e) => setNewSocialInfo({ ...newSocialInfo, platform: e.target.value })}
-                      className="w-full px-3 py-2 border border-purple-300 rounded-2xl outline-none focus:ring-2 focus:ring-purple-400 text-sm"
+                      className="w-full px-3 py-2 border border-purple-300 rounded-2xl outline-none focus:ring-2 focus:ring-purple-400 text-sm text-gray-900"
                     >
                       <option value="Facebook">Facebook</option>
                       <option value="Instagram">Instagram</option>
@@ -439,7 +458,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                         value={newSocialInfo.url}
                         onChange={(e) => setNewSocialInfo({ ...newSocialInfo, url: e.target.value })}
                         placeholder="Enter profile URL"
-                        className="flex-1 px-3 py-2 border border-purple-300 rounded-2xl focus:ring-2 focus:ring-purple-400 outline-none text-sm"
+                        className="flex-1 px-3 py-2 border border-purple-300 rounded-2xl focus:ring-2 focus:ring-purple-400 outline-none text-sm text-gray-900"
                       />
                       <button
                         onClick={handleAddSocialInfo}
@@ -476,7 +495,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate }: Person
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add a note or comment..."
-                className="w-full px-4 py-3 border-2 border-yellow-300 rounded-2xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none text-sm resize-none"
+                className="w-full px-4 py-3 border-2 border-yellow-300 rounded-2xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none text-sm resize-none text-gray-900"
                 rows={3}
               />
               <button

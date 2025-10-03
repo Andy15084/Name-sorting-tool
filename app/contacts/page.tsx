@@ -169,6 +169,29 @@ export default function ContactsPage() {
     }
   };
 
+  const handleDeletePerson = async (personId: string) => {
+    try {
+      const response = await fetch(`/api/contacts/${personId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Remove from local state
+        const updatedContacts = contacts.filter(c => c.id !== personId);
+        setContacts(updatedContacts);
+        
+        const updatedFiltered = filteredContacts.filter(c => c.id !== personId);
+        setFilteredContacts(updatedFiltered);
+        
+        // Close the modal
+        setSelectedPerson(null);
+      }
+    } catch (error) {
+      console.error('Failed to delete contact:', error);
+      alert('Failed to delete contact. Please try again.');
+    }
+  };
+
   const addNewProfession = (profession: string) => {
     if (!availableProfessions.includes(profession)) {
       const updated = [...availableProfessions, profession];
@@ -209,10 +232,10 @@ export default function ContactsPage() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-4 max-w-7xl mx-auto w-full">
         {/* Search Section */}
-        <div className="w-full bg-white rounded-3xl shadow-md p-4 mb-4 border border-peach-100">
+        <div className="w-full bg-white rounded-3xl shadow-md p-3 sm:p-4 mb-4 border border-peach-100">
           <div className="flex flex-col gap-3">
             {/* Search Bar with Type Selector and View Toggle */}
-            <div className="flex gap-2 items-start">
+            <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-start">
               {/* Search Type Selector */}
               <div className="flex-shrink-0">
                 <select
@@ -221,7 +244,7 @@ export default function ContactsPage() {
                     setSearchType(e.target.value as SearchType);
                     setSearchValue('');
                   }}
-                  className="pl-3 pr-8 py-2 bg-peach-500 text-white rounded-full font-medium shadow-sm cursor-pointer outline-none hover:bg-peach-600 transition-all duration-200 text-sm appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23fff%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.25rem_center] bg-no-repeat"
+                  className="w-full sm:w-auto pl-3 pr-8 py-2 bg-peach-500 text-white rounded-full font-medium shadow-sm cursor-pointer outline-none hover:bg-peach-600 transition-all duration-200 text-sm appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23fff%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.25rem_center] bg-no-repeat"
                 >
                   <option value="name">Name</option>
                   <option value="dateOfBirth">Date of Birth</option>
@@ -233,55 +256,60 @@ export default function ContactsPage() {
               {/* Search Input */}
               <div className="flex-1 flex gap-2">
                 {searchType === 'dateOfBirth' ? (
-                  <div className="relative flex-1 max-w-xs">
+                  <div className="relative flex-1">
                     <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-peach-500" />
                     <input
                       type="date"
                       value={searchValue}
                       onChange={(e) => setSearchValue(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 border border-peach-200 rounded-full focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-sm"
+                      className="w-full pl-9 pr-3 py-2 border border-peach-200 rounded-full focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-sm text-gray-900"
                     />
                   </div>
                 ) : (
-                  <div className="relative flex-1 max-w-xs">
+                  <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-peach-500" />
                     <input
                       type="text"
                       value={searchValue}
                       onChange={(e) => setSearchValue(e.target.value)}
                       placeholder={`Search by ${searchType}...`}
-                      className="w-full pl-9 pr-3 py-2 border border-peach-200 rounded-full focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-sm"
+                      className="w-full pl-9 pr-3 py-2 border border-peach-200 rounded-full focus:ring-2 focus:ring-peach-400 focus:border-peach-400 outline-none transition-all duration-200 text-sm text-gray-900"
                     />
                   </div>
                 )}
                 
-                {/* View Toggle */}
-                <div className="flex gap-1 border border-gray-200 rounded-full p-0.5">
+                {/* View Toggle and Add Button */}
+                <div className="flex gap-2 flex-shrink-0">
+                  <div className="flex gap-1 border border-gray-200 rounded-full p-0.5">
+                    <button
+                      onClick={() => setViewMode('bubbles')}
+                      className={`p-1.5 rounded-full transition-all duration-200 ${
+                        viewMode === 'bubbles' ? 'bg-peach-500 text-white' : 'text-gray-500 hover:bg-gray-100'
+                      }`}
+                      title="List View"
+                    >
+                      <List className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('table')}
+                      className={`p-1.5 rounded-full transition-all duration-200 ${
+                        viewMode === 'table' ? 'bg-peach-500 text-white' : 'text-gray-500 hover:bg-gray-100'
+                      }`}
+                      title="Table View"
+                    >
+                      <Grid3x3 className="w-4 h-4" />
+                    </button>
+                  </div>
+
                   <button
-                    onClick={() => setViewMode('bubbles')}
-                    className={`p-1.5 rounded-full transition-all duration-200 ${
-                      viewMode === 'bubbles' ? 'bg-peach-500 text-white' : 'text-gray-500 hover:bg-gray-100'
-                    }`}
+                    onClick={() => setShowAddModal(true)}
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-sage-500 text-white rounded-full hover:bg-sage-600 transition-all duration-200 font-medium shadow-sm text-sm"
+                    title="Add Contact"
                   >
-                    <List className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('table')}
-                    className={`p-1.5 rounded-full transition-all duration-200 ${
-                      viewMode === 'table' ? 'bg-peach-500 text-white' : 'text-gray-500 hover:bg-gray-100'
-                    }`}
-                  >
-                    <Grid3x3 className="w-4 h-4" />
+                    <UserPlus className="w-4 h-4" />
+                    <span className="hidden sm:inline">Add</span>
                   </button>
                 </div>
-
-                <button
-                  onClick={() => setShowAddModal(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-sage-500 text-white rounded-full hover:bg-sage-600 transition-all duration-200 font-medium shadow-sm text-sm"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  Add
-                </button>
               </div>
             </div>
 
@@ -469,16 +497,16 @@ export default function ContactsPage() {
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
+              <div className="overflow-x-auto -mx-2 sm:mx-0">
+                <table className="w-full min-w-[768px]">
                   <thead className="bg-peach-100 border-b-2 border-peach-200">
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-peach-800">Name</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-peach-800">Date of Birth</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-peach-800">Contact</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-peach-800">School</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-peach-800">Professions</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-peach-800">Social Media</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-peach-800 whitespace-nowrap">Name</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-peach-800 whitespace-nowrap">Date of Birth</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-peach-800 whitespace-nowrap">Contact</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-peach-800 whitespace-nowrap">School</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-peach-800 whitespace-nowrap">Professions</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-peach-800 whitespace-nowrap">Social Media</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -489,26 +517,26 @@ export default function ContactsPage() {
                         className="hover:bg-peach-50 transition-colors duration-200 animate-fadeIn cursor-pointer"
                         style={{ animationDelay: `${index * 30}ms` }}
                       >
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-peach-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-peach-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0">
                               {contact.name.charAt(0).toUpperCase()}
                             </div>
-                            <span className="font-medium text-gray-900">{contact.name}</span>
+                            <span className="font-medium text-gray-900 text-xs sm:text-sm">{contact.name}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{contact.dateOfBirth}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">{contact.dateOfBirth}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                           <div className="space-y-1">
                             {contact.contacts && contact.contacts.length > 0 ? (
                               contact.contacts.map((contactInfo, idx) => (
                                 <div key={idx} className="flex items-center gap-1.5 text-xs text-gray-700">
                                   {contactInfo.type === 'email' ? (
-                                    <Mail className="w-3 h-3 text-blue-600" />
+                                    <Mail className="w-3 h-3 text-blue-600 flex-shrink-0" />
                                   ) : (
-                                    <Phone className="w-3 h-3 text-blue-600" />
+                                    <Phone className="w-3 h-3 text-blue-600 flex-shrink-0" />
                                   )}
-                                  <span className="truncate max-w-[120px]">{contactInfo.value}</span>
+                                  <span className="truncate max-w-[100px] sm:max-w-[120px]">{contactInfo.value}</span>
                                 </div>
                               ))
                             ) : (
@@ -516,14 +544,14 @@ export default function ContactsPage() {
                             )}
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{contact.school || '-'}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700">{contact.school || '-'}</td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                           <div className="flex flex-wrap gap-1">
                             {contact.professions.length > 0 ? (
                               contact.professions.map((profession) => (
                                 <span
                                   key={profession}
-                                  className="px-2 py-1 bg-sage-100 text-sage-800 rounded-full text-xs font-medium"
+                                  className="px-2 py-0.5 sm:py-1 bg-sage-100 text-sage-800 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap"
                                 >
                                   {profession}
                                 </span>
@@ -533,7 +561,7 @@ export default function ContactsPage() {
                             )}
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                           <div className="flex flex-wrap gap-1">
                             {contact.socialMedia && contact.socialMedia.length > 0 ? (
                               contact.socialMedia.map((social, idx) => (
@@ -543,7 +571,7 @@ export default function ContactsPage() {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
-                                  className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium hover:bg-purple-200 transition-colors"
+                                  className="px-2 py-0.5 sm:py-1 bg-purple-100 text-purple-800 rounded-full text-[10px] sm:text-xs font-medium hover:bg-purple-200 transition-colors whitespace-nowrap"
                                 >
                                   {social.platform}
                                 </a>
@@ -580,6 +608,7 @@ export default function ContactsPage() {
           person={selectedPerson}
           onClose={() => setSelectedPerson(null)}
           onUpdate={handleUpdatePerson}
+          onDelete={handleDeletePerson}
         />
       )}
     </div>
