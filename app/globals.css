@@ -3,6 +3,30 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Peach colors */
+  --peach-50: #fff5f0;
+  --peach-100: #ffe8dd;
+  --peach-200: #ffd4c1;
+  --peach-300: #ffb894;
+  --peach-400: #ff9568;
+  --peach-500: #ff7a45;
+  --peach-600: #f55d2a;
+  --peach-700: #e04820;
+  --peach-800: #b8391f;
+  --peach-900: #96321f;
+  
+  /* Sage green colors */
+  --sage-50: #f5f9f5;
+  --sage-100: #e8f3e8;
+  --sage-200: #d1e7d1;
+  --sage-300: #a8d5a8;
+  --sage-400: #7abf7a;
+  --sage-500: #5da75d;
+  --sage-600: #478847;
+  --sage-700: #3a6d3a;
+  --sage-800: #325732;
+  --sage-900: #2b492b;
 }
 
 @theme inline {
@@ -10,6 +34,34 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Peach colors */
+  --color-peach-50: var(--peach-50);
+  --color-peach-100: var(--peach-100);
+  --color-peach-200: var(--peach-200);
+  --color-peach-300: var(--peach-300);
+  --color-peach-400: var(--peach-400);
+  --color-peach-500: var(--peach-500);
+  --color-peach-600: var(--peach-600);
+  --color-peach-700: var(--peach-700);
+  --color-peach-800: var(--peach-800);
+  --color-peach-900: var(--peach-900);
+  
+  /* Sage colors */
+  --color-sage-50: var(--sage-50);
+  --color-sage-100: var(--sage-100);
+  --color-sage-200: var(--sage-200);
+  --color-sage-300: var(--sage-300);
+  --color-sage-400: var(--sage-400);
+  --color-sage-500: var(--sage-500);
+  --color-sage-600: var(--sage-600);
+  --color-sage-700: var(--sage-700);
+  --color-sage-800: var(--sage-800);
+  --color-sage-900: var(--sage-900);
+  
+  /* Extra rounded corners */
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +75,52 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #ff9568;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #ff7a45;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out forwards;
 }

@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Contacts App
+
+A beautiful and modern contacts management application built with Next.js, TypeScript, Tailwind CSS, and Lucide icons.
+
+## Features
+
+- 🔐 **Login Page** - Simple authentication with name and password
+- 🔍 **Advanced Search** - Search contacts by name, date of birth, school, and profession
+- 🏷️ **Filter Bubbles** - Visual tags showing active search filters
+- ➕ **Add Contacts** - Easy-to-use form to add new people with multiple fields
+- 💼 **Profession Management** - Select from existing professions or add new ones
+- 💾 **Persistent Storage** - All data stored in browser's localStorage
+- 🎨 **Modern UI** - Beautiful, responsive design with smooth animations
 
 ## Getting Started
 
-First, run the development server:
+### Installation
+
+1. Navigate to the project directory:
+   ```bash
+   cd contacts-app
+   ```
+
+2. Install dependencies (already done):
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Building for Production
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to Use
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Login
+- Enter any name and password to access the application
+- Your credentials are stored in session storage for the current session
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Search Contacts
+- **Quick Search**: Use the main search bar to search by name
+- **Advanced Filters**: Use the four filter inputs to search by:
+  - Name
+  - Date of Birth
+  - School
+  - Profession
+- **Filter Bubbles**: Active filters appear as bubbles below the search inputs. Click the X to remove them.
 
-## Learn More
+### 3. Add New Contact
+Click the "Add Person" button to open the form with these fields:
+- **Name** (required)
+- **Date of Birth** (required)
+- **When We Met** (required) - Free text field
+- **School** (optional)
+- **Profession Description** (optional) - Free text field
+- **Select Professions** - Choose one or more from the available list
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Add New Profession
+When adding a contact:
+1. Click "Add New Profession" button
+2. Enter the profession name
+3. Click "Add" to save it
+4. The new profession is now available for selection
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js 15** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icons
+- **localStorage** - Data persistence
 
-## Deploy on Vercel
+## Data Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contacts are stored with the following information:
+- ID (auto-generated)
+- Name
+- Date of Birth
+- When We Met
+- School (optional)
+- Profession Description (optional)
+- Selected Professions (array)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+- All data is stored locally in your browser
+- Clearing browser data will remove all contacts
+- No backend server required - everything runs in the browser
