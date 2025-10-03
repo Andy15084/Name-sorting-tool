@@ -37,23 +37,12 @@ export default function ContactsPage() {
       setIsAuthenticated(true);
       setUserName(name || '');
       
-      const savedContacts = localStorage.getItem('contacts');
+      // Fetch contacts from database
+      fetchContacts();
+      
+      // Load professions and schools from localStorage (non-critical data)
       const savedProfessions = localStorage.getItem('professions');
       const savedSchools = localStorage.getItem('schools');
-      
-      if (savedContacts) {
-        const parsed = JSON.parse(savedContacts);
-        // Ensure all contacts have required arrays
-        const normalizedContacts = parsed.map((c: Person) => ({
-          ...c,
-          comments: c.comments || [],
-          contacts: c.contacts || [],
-          socialMedia: c.socialMedia || [],
-          professions: c.professions || [],
-        }));
-        setContacts(normalizedContacts);
-        setFilteredContacts(normalizedContacts);
-      }
       
       if (savedProfessions) {
         setAvailableProfessions(JSON.parse(savedProfessions));
@@ -64,6 +53,26 @@ export default function ContactsPage() {
       }
     }
   }, [router]);
+
+  const fetchContacts = async () => {
+    try {
+      const response = await fetch('/api/contacts');
+      if (response.ok) {
+        const data = await response.json();
+        const normalizedContacts = data.map((c: Person) => ({
+          ...c,
+          comments: c.comments || [],
+          contacts: c.contacts || [],
+          socialMedia: c.socialMedia || [],
+          professions: c.professions || [],
+        }));
+        setContacts(normalizedContacts);
+        setFilteredContacts(normalizedContacts);
+      }
+    } catch (error) {
+      console.error('Failed to fetch contacts:', error);
+    }
+  };
 
   useEffect(() => {
     let filtered = [...contacts];
@@ -105,38 +114,59 @@ export default function ContactsPage() {
     router.push('/');
   };
 
-  const handleAddContact = (person: Omit<Person, 'id'>) => {
-    const newPerson: Person = {
-      ...person,
-      id: Date.now().toString(),
-      comments: [],
-    };
-    const updatedContacts = [...contacts, newPerson];
-    setContacts(updatedContacts);
-    localStorage.setItem('contacts', JSON.stringify(updatedContacts));
+  const handleAddContact = async (person: Omit<Person, 'id'>) => {
+    try {
+      const response = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...person,
+          comments: [],
+        }),
+      });
 
-    if (person.school && !availableSchools.includes(person.school)) {
-      const updatedSchools = [...availableSchools, person.school];
-      setAvailableSchools(updatedSchools);
-      localStorage.setItem('schools', JSON.stringify(updatedSchools));
+      if (response.ok) {
+        // Refresh contacts from database
+        await fetchContacts();
+        
+        // Update schools list
+        if (person.school && !availableSchools.includes(person.school)) {
+          const updatedSchools = [...availableSchools, person.school];
+          setAvailableSchools(updatedSchools);
+          localStorage.setItem('schools', JSON.stringify(updatedSchools));
+        }
+      }
+    } catch (error) {
+      console.error('Failed to add contact:', error);
+      alert('Failed to add contact. Please try again.');
     }
   };
 
-  const handleUpdatePerson = (updatedPerson: Person) => {
-    const updatedContacts = contacts.map(c => 
-      c.id === updatedPerson.id ? updatedPerson : c
-    );
-    setContacts(updatedContacts);
-    localStorage.setItem('contacts', JSON.stringify(updatedContacts));
-    
-    // Update filtered contacts too if they're being displayed
-    const updatedFiltered = filteredContacts.map(c => 
-      c.id === updatedPerson.id ? updatedPerson : c
-    );
-    setFilteredContacts(updatedFiltered);
-    
-    // Update the selected person to reflect changes
-    setSelectedPerson(updatedPerson);
+  const handleUpdatePerson = async (updatedPerson: Person) => {
+    try {
+      const response = await fetch(`/api/contacts/${updatedPerson.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedPerson),
+      });
+
+      if (response.ok) {
+        // Update local state immediately for better UX
+        const updatedContacts = contacts.map(c => 
+          c.id === updatedPerson.id ? updatedPerson : c
+        );
+        setContacts(updatedContacts);
+        
+        const updatedFiltered = filteredContacts.map(c => 
+          c.id === updatedPerson.id ? updatedPerson : c
+        );
+        setFilteredContacts(updatedFiltered);
+        setSelectedPerson(updatedPerson);
+      }
+    } catch (error) {
+      console.error('Failed to update contact:', error);
+      alert('Failed to update contact. Please try again.');
+    }
   };
 
   const addNewProfession = (profession: string) => {
