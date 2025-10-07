@@ -32,7 +32,7 @@ export default function ContactsPage() {
     const name = sessionStorage.getItem('userName');
     
     if (!auth) {
-      router.push('/');
+      router.push('/login');
     } else {
       setIsAuthenticated(true);
       setUserName(name || '');
@@ -56,7 +56,10 @@ export default function ContactsPage() {
 
   const fetchContacts = async () => {
     try {
-      const response = await fetch('/api/contacts');
+      const userId = sessionStorage.getItem('userId');
+      if (!userId) return;
+      
+      const response = await fetch(`/api/contacts?userId=${userId}`);
       if (response.ok) {
         const data = await response.json();
         const normalizedContacts = data.map((c: Person) => ({
@@ -111,15 +114,22 @@ export default function ContactsPage() {
   const handleLogout = () => {
     sessionStorage.removeItem('isAuthenticated');
     sessionStorage.removeItem('userName');
-    router.push('/');
+    router.push('/login');
   };
 
   const handleAddContact = async (person: Omit<Person, 'id'>) => {
     try {
+      const userId = sessionStorage.getItem('userId');
+      if (!userId) {
+        alert('Please log in to add contacts');
+        return;
+      }
+
       const response = await fetch('/api/contacts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          userId,
           ...person,
           comments: [],
         }),

@@ -4,7 +4,13 @@ import prisma from '@/lib/prisma';
 // GET all contacts
 export async function GET(request: NextRequest) {
   try {
-    const userId = 'andrej-paulicka'; // Simple user ID based on your login
+    // Get userId from query params (passed from client)
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID required' }, { status: 400 });
+    }
     
     const contacts = await prisma.contact.findMany({
       where: { userId },
@@ -21,21 +27,25 @@ export async function GET(request: NextRequest) {
 // POST new contact
 export async function POST(request: NextRequest) {
   try {
-    const userId = 'andrej-paulicka';
     const body = await request.json();
+    const { userId, ...contactData } = body;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID required' }, { status: 400 });
+    }
 
     const contact = await prisma.contact.create({
       data: {
         userId,
-        name: body.name,
-        dateOfBirth: body.dateOfBirth,
-        whenWeMet: body.whenWeMet,
-        school: body.school,
-        professionText: body.professionText,
-        professions: body.professions || [],
-        contacts: body.contacts || [],
-        socialMedia: body.socialMedia || [],
-        comments: body.comments || [],
+        name: contactData.name,
+        dateOfBirth: contactData.dateOfBirth,
+        whenWeMet: contactData.whenWeMet,
+        school: contactData.school,
+        professionText: contactData.professionText,
+        professions: contactData.professions || [],
+        contacts: contactData.contacts || [],
+        socialMedia: contactData.socialMedia || [],
+        comments: contactData.comments || [],
       },
     });
 

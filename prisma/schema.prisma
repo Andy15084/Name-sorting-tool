@@ -7,18 +7,36 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+model User {
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  name                String
+  password            String
+  stripeCustomerId    String?   @unique
+  stripeSubscriptionId String?  @unique
+  subscriptionStatus  String?   // active, canceled, past_due, etc.
+  subscriptionEndsAt  DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  
+  contacts            Contact[]
+  
+  @@index([email])
+}
+
 model Contact {
   id              String   @id @default(cuid())
   userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name            String
   dateOfBirth     String
   whenWeMet       String
   school          String?
   professionText  String?
-  professions     String[]
-  contacts        Json[]
-  socialMedia     Json[]
-  comments        Json[]
+  professions     Json
+  contacts        Json
+  socialMedia     Json
+  comments        Json
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
