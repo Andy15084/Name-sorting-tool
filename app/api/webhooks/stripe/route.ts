@@ -54,7 +54,10 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
-        console.log('Payment failed for subscription:', invoice.subscription);
+        const subscriptionId = typeof invoice.subscription === 'string' 
+          ? invoice.subscription 
+          : invoice.subscription?.id;
+        console.log('Payment failed for subscription:', subscriptionId);
         
         // TODO: Handle failed payment (send email, update status, etc.)
         break;
