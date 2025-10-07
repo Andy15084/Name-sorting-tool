@@ -25,30 +25,50 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         
-        // Store subscription info in your database
-        // You'll need to create a Subscription model in your Prisma schema
-        console.log('Checkout completed for user:', session.metadata?.userId);
-        console.log('Customer email:', session.customer_email);
-        console.log('Subscription ID:', session.subscription);
+        const userId = session.metadata?.userId;
+        const subscriptionId = session.subscription as string;
+        const customerId = session.customer as string;
         
-        // TODO: Update user subscription status in database
+        if (userId) {
+          // Update user subscription status in database
+          await prisma.user.update({
+            where: { id: userId },
+            data: {
+              stripeCustomerId: customerId,
+              stripeSubscriptionId: subscriptionId,
+              subscriptionStatus: 'active',
+            },
+          });
+          console.log('✅ Subscription activated for user:', userId);
+        }
         break;
       }
 
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
-        console.log('Subscription updated:', subscription.id);
-        console.log('Status:', subscription.status);
         
-        // TODO: Update subscription status in database
+        // Update subscription status in database
+        await prisma.user.updateMany({
+          where: { stripeSubscriptionId: subscription.id },
+          data: {
+            subscriptionStatus: subscription.status,
+          },
+        });
+        console.log('✅ Subscription status updated:', subscription.status);
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        console.log('Subscription canceled:', subscription.id);
         
-        // TODO: Mark subscription as canceled in database
+        // Mark subscription as canceled in database
+        await prisma.user.updateMany({
+          where: { stripeSubscriptionId: subscription.id },
+          data: {
+            subscriptionStatus: 'canceled',
+          },
+        });
+        console.log('✅ Subscription canceled');
         break;
       }
 
