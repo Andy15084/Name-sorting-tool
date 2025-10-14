@@ -28,8 +28,29 @@ export default function ContactsPage() {
   const [availableSchools, setAvailableSchools] = useState<string[]>([]);
 
   useEffect(() => {
-    const auth = sessionStorage.getItem('isAuthenticated');
-    const name = sessionStorage.getItem('userName');
+    // Check session storage first
+    let auth = sessionStorage.getItem('isAuthenticated');
+    let name = sessionStorage.getItem('userName');
+    
+    // If not in session, check if user has "Remember Me" enabled
+    if (!auth) {
+      const rememberedUser = localStorage.getItem('rememberedUser');
+      if (rememberedUser) {
+        try {
+          const userData = JSON.parse(rememberedUser);
+          // Restore session from localStorage
+          sessionStorage.setItem('isAuthenticated', 'true');
+          sessionStorage.setItem('userId', userData.userId);
+          sessionStorage.setItem('userName', userData.userName);
+          sessionStorage.setItem('userEmail', userData.userEmail);
+          auth = 'true';
+          name = userData.userName;
+        } catch (error) {
+          // If there's an error parsing, clear the invalid data
+          localStorage.removeItem('rememberedUser');
+        }
+      }
+    }
     
     if (!auth) {
       router.push('/login');
@@ -112,8 +133,15 @@ export default function ContactsPage() {
   }, [searchValue, searchType, contacts]);
 
   const handleLogout = () => {
+    // Clear session storage
     sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('userId');
     sessionStorage.removeItem('userName');
+    sessionStorage.removeItem('userEmail');
+    
+    // Clear "Remember Me" data from localStorage
+    localStorage.removeItem('rememberedUser');
+    
     router.push('/login');
   };
 

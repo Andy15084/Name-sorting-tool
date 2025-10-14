@@ -61,12 +61,8 @@ export default function SignupPage() {
       sessionStorage.setItem('userName', data.user.name);
       sessionStorage.setItem('userEmail', data.user.email);
 
-      // Check if user has active subscription
-      if (data.user.subscriptionStatus === 'active') {
-        router.push('/contacts');
-      } else {
-        router.push('/pricing');
-      }
+      // Redirect directly to contacts
+      router.push('/contacts');
     } catch (error) {
       console.error('Signup error:', error);
       setError('Something went wrong. Please try again.');

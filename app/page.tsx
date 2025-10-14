@@ -41,12 +41,12 @@ export default function LandingPage() {
   ];
 
   const benefits = [
+    "100% Free Forever",
     "Never lose a contact again",
     "Remember important details about everyone",
     "Find anyone in seconds",
     "Beautiful, modern interface",
-    "Secure local database",
-    "Mobile-friendly design"
+    "Access from any device"
   ];
 
   return (
@@ -76,7 +76,7 @@ export default function LandingPage() {
                 onClick={() => router.push('/signup')}
                 className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-peach-500 to-peach-600 text-white rounded-full font-bold text-lg hover:from-peach-600 hover:to-peach-700 transform hover:scale-105 transition-all duration-200 shadow-xl hover:shadow-2xl"
               >
-                Get Started - €1.99/mo
+                Get Started Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               
@@ -237,7 +237,7 @@ export default function LandingPage() {
             onClick={() => router.push('/signup')}
             className="group inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-full font-bold text-xl hover:bg-cream-50 transform hover:scale-105 transition-all duration-200 shadow-xl hover:shadow-2xl"
           >
-            Get Started - €1.99/mo
+            Get Started Free
             <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

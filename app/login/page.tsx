@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail } from 'lucide-react';
 import Link from 'next/link';
@@ -8,9 +8,29 @@ import Link from 'next/link';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // Check if user is already logged in with remember me
+  useEffect(() => {
+    const rememberedUser = localStorage.getItem('rememberedUser');
+    if (rememberedUser) {
+      try {
+        const userData = JSON.parse(rememberedUser);
+        // Set session storage
+        sessionStorage.setItem('isAuthenticated', 'true');
+        sessionStorage.setItem('userId', userData.userId);
+        sessionStorage.setItem('userName', userData.userName);
+        sessionStorage.setItem('userEmail', userData.userEmail);
+        // Redirect to contacts
+        router.push('/contacts');
+      } catch (error) {
+        localStorage.removeItem('rememberedUser');
+      }
+    }
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,18 +57,24 @@ export default function LoginPage() {
         return;
       }
 
-      // Store authentication
+      // Store authentication in session storage
       sessionStorage.setItem('isAuthenticated', 'true');
       sessionStorage.setItem('userId', data.user.id);
       sessionStorage.setItem('userName', data.user.name);
       sessionStorage.setItem('userEmail', data.user.email);
 
-      // Check if user has active subscription
-      if (data.user.subscriptionStatus === 'active') {
-        router.push('/contacts');
-      } else {
-        router.push('/pricing');
+      // If "Remember Me" is checked, also store in localStorage
+      if (rememberMe) {
+        const userData = {
+          userId: data.user.id,
+          userName: data.user.name,
+          userEmail: data.user.email,
+        };
+        localStorage.setItem('rememberedUser', JSON.stringify(userData));
       }
+
+      // Redirect directly to contacts
+      router.push('/contacts');
     } catch (error) {
       console.error('Login error:', error);
       setError('Something went wrong. Please try again.');
@@ -110,6 +136,20 @@ export default function LoginPage() {
                 required
               />
             </div>
+          </div>
+
+          {/* Remember Me Checkbox */}
+          <div className="flex items-center">
+            <input
+              id="rememberMe"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="w-4 h-4 text-peach-600 bg-gray-100 border-gray-300 rounded focus:ring-peach-500 focus:ring-2"
+            />
+            <label htmlFor="rememberMe" className="ml-2 text-sm font-medium text-gray-700">
+              Keep me signed in
+            </label>
           </div>
 
           <button

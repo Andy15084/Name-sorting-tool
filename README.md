@@ -4,13 +4,16 @@ A beautiful and modern contacts management application built with Next.js, TypeS
 
 ## Features
 
-- 🔐 **Login Page** - Simple authentication with name and password
+- 🔐 **User Authentication** - Secure signup and login with email and password
+- 🔄 **Remember Me** - Stay signed in across sessions and devices
+- 🌐 **Cross-Device Access** - Access your contacts from any device
 - 🔍 **Advanced Search** - Search contacts by name, date of birth, school, and profession
 - 🏷️ **Filter Bubbles** - Visual tags showing active search filters
-- ➕ **Add Contacts** - Easy-to-use form to add new people with multiple fields
+- ➕ **Rich Contact Profiles** - Add emails, phones, social media, and more
 - 💼 **Profession Management** - Select from existing professions or add new ones
-- 💾 **Persistent Storage** - All data stored in browser's localStorage
+- 💾 **Database Storage** - All data securely stored in PostgreSQL
 - 🎨 **Modern UI** - Beautiful, responsive design with smooth animations
+- 💯 **100% Free** - No subscriptions, no paywalls, completely free forever
 
 ## Getting Started
 
@@ -42,11 +45,17 @@ npm start
 
 ## How to Use
 
-### 1. Login
-- Enter any name and password to access the application
-- Your credentials are stored in session storage for the current session
+### 1. Create an Account
+- Click "Get Started Free" on the homepage
+- Enter your email, name, and password
+- Your account is created and you're automatically logged in
 
-### 2. Search Contacts
+### 2. Login (Returning Users)
+- Enter your email and password
+- Check "Keep me signed in" to stay logged in across sessions
+- Your data is accessible from any device
+
+### 3. Search Contacts
 - **Quick Search**: Use the main search bar to search by name
 - **Advanced Filters**: Use the four filter inputs to search by:
   - Name
@@ -55,16 +64,18 @@ npm start
   - Profession
 - **Filter Bubbles**: Active filters appear as bubbles below the search inputs. Click the X to remove them.
 
-### 3. Add New Contact
+### 4. Add New Contact
 Click the "Add Person" button to open the form with these fields:
 - **Name** (required)
 - **Date of Birth** (required)
 - **When We Met** (required) - Free text field
+- **Contact Information** - Add emails and phone numbers
+- **Social Media** - Link social profiles
 - **School** (optional)
 - **Profession Description** (optional) - Free text field
 - **Select Professions** - Choose one or more from the available list
 
-### 4. Add New Profession
+### 5. Add New Profession
 When adding a contact:
 1. Click "Add New Profession" button
 2. Enter the profession name
@@ -74,14 +85,24 @@ When adding a contact:
 ## Tech Stack
 
 - **Next.js 15** - React framework
+- **React 19** - UI library
 - **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
-- **localStorage** - Data persistence
+- **Tailwind CSS 4** - Modern styling
+- **Prisma** - Database ORM
+- **PostgreSQL** - Database
+- **bcryptjs** - Password encryption
+- **Lucide React** - Beautiful icons
 
 ## Data Structure
 
-Contacts are stored with the following information:
+### User Accounts
+- Email (unique)
+- Name
+- Password (encrypted)
+- Created/Updated timestamps
+
+### Contacts
+Each contact includes:
 - ID (auto-generated)
 - Name
 - Date of Birth
@@ -89,9 +110,14 @@ Contacts are stored with the following information:
 - School (optional)
 - Profession Description (optional)
 - Selected Professions (array)
+- Contact Information (emails & phones)
+- Social Media Links
+- Comments & Notes (timestamped)
 
-## Notes
+## Security
 
-- All data is stored locally in your browser
-- Clearing browser data will remove all contacts
-- No backend server required - everything runs in the browser
+- Passwords are encrypted using bcrypt
+- Session-based authentication
+- "Remember Me" feature for persistent login
+- Per-user data isolation
+- SQL injection protection via Prisma
