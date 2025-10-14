@@ -341,7 +341,7 @@ export default function ContactsPage() {
 
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-sage-500 text-white rounded-full hover:bg-sage-600 transition-all duration-200 font-medium shadow-sm text-sm"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-peach-500 text-white rounded-full hover:bg-peach-600 transition-all duration-200 font-medium shadow-sm text-sm"
                     title="Add Contact"
                   >
                     <UserPlus className="w-4 h-4" />
@@ -384,8 +384,8 @@ export default function ContactsPage() {
                       onClick={() => setSearchValue(profession)}
                       className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
                         searchValue === profession
-                          ? 'bg-sage-500 text-white shadow-sm'
-                          : 'bg-sage-100 text-sage-800 hover:bg-sage-200'
+                          ? 'bg-lightblue-500 text-white shadow-sm'
+                          : 'bg-lightblue-100 text-lightblue-800 hover:bg-lightblue-200'
                       }`}
                     >
                       {profession}
@@ -452,7 +452,7 @@ export default function ContactsPage() {
                             {contact.dateOfBirth}
                           </span>
                           {contact.school && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-sage-50 text-sage-800 rounded-full text-[10px] font-medium">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-lightblue-50 text-lightblue-800 rounded-full text-[10px] font-medium">
                               <GraduationCap className="w-2.5 h-2.5" />
                               {contact.school}
                             </span>
@@ -460,7 +460,7 @@ export default function ContactsPage() {
                           {contact.professions.slice(0, 2).map((profession) => (
                             <span
                               key={profession}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 bg-sage-100 text-sage-800 rounded-full text-[10px] font-medium"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 bg-lightblue-100 text-lightblue-800 rounded-full text-[10px] font-medium"
                             >
                               <Briefcase className="w-2.5 h-2.5" />
                               {profession}
@@ -589,7 +589,7 @@ export default function ContactsPage() {
                               contact.professions.map((profession) => (
                                 <span
                                   key={profession}
-                                  className="px-2 py-0.5 sm:py-1 bg-sage-100 text-sage-800 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap"
+                                  className="px-2 py-0.5 sm:py-1 bg-lightblue-100 text-lightblue-800 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap"
                                 >
                                   {profession}
                                 </span>

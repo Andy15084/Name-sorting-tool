@@ -117,7 +117,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate, onDelete
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
       <div className="bg-white rounded-3xl sm:rounded-4xl shadow-2xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-peach-400 to-sage-400 px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center rounded-t-3xl sm:rounded-t-4xl z-10">
+        <div className="sticky top-0 bg-gradient-to-r from-peach-400 to-lightblue-400 px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center rounded-t-3xl sm:rounded-t-4xl z-10">
           <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center text-peach-600 font-bold text-lg sm:text-2xl shadow-lg flex-shrink-0">
               {editedPerson.name.charAt(0).toUpperCase()}
@@ -148,7 +148,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate, onDelete
             ) : (
               <button
                 onClick={handleSave}
-                className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white text-sage-600 hover:bg-white/90 rounded-full transition-all duration-200 font-semibold text-sm"
+                className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white text-lightblue-600 hover:bg-white/90 rounded-full transition-all duration-200 font-semibold text-sm"
               >
                 <Save className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Save</span>
@@ -224,7 +224,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate, onDelete
                   
                   {editedPerson.school && (
                     <div className="flex items-start gap-3">
-                      <GraduationCap className="w-5 h-5 text-sage-600 mt-0.5" />
+                      <GraduationCap className="w-5 h-5 text-lightblue-600 mt-0.5" />
                       <div>
                         <p className="text-xs text-gray-600 font-medium">School</p>
                         <p className="text-sm text-gray-900">{editedPerson.school}</p>
@@ -328,9 +328,9 @@ export default function PersonProfileModal({ person, onClose, onUpdate, onDelete
           </div>
 
           {/* Professions */}
-          <div className="bg-sage-50 rounded-3xl p-5 border border-sage-200">
+          <div className="bg-lightblue-50 rounded-3xl p-5 border border-lightblue-200">
             <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-sage-600" />
+              <Briefcase className="w-5 h-5 text-lightblue-600" />
               Professions
             </h3>
             
@@ -341,7 +341,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate, onDelete
                   <textarea
                     value={editedPerson.professionText || ''}
                     onChange={(e) => setEditedPerson({ ...editedPerson, professionText: e.target.value })}
-                    className="w-full px-3 py-2 border border-sage-300 rounded-2xl focus:ring-2 focus:ring-sage-400 outline-none text-sm resize-none text-gray-900"
+                    className="w-full px-3 py-2 border border-lightblue-300 rounded-2xl focus:ring-2 focus:ring-lightblue-400 outline-none text-sm resize-none text-gray-900"
                     rows={2}
                   />
                 </div>
@@ -362,7 +362,7 @@ export default function PersonProfileModal({ person, onClose, onUpdate, onDelete
                       {editedPerson.professions.map((profession) => (
                         <span
                           key={profession}
-                          className="px-4 py-2 bg-sage-200 text-sage-900 rounded-full text-sm font-medium"
+                          className="px-4 py-2 bg-lightblue-200 text-lightblue-900 rounded-full text-sm font-medium"
                         >
                           {profession}
                         </span>

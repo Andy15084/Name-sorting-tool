@@ -199,18 +199,18 @@ export default function AddPersonModal({
                 setShowSchoolSuggestions(e.target.value.length > 0);
               }}
               onFocus={() => setShowSchoolSuggestions(formData.school.length > 0)}
-              className="w-full px-5 py-3.5 border-2 border-sage-200 rounded-3xl focus:ring-2 focus:ring-sage-400 focus:border-sage-400 outline-none transition-all duration-200 text-gray-900"
+              className="w-full px-5 py-3.5 border-2 border-lightblue-200 rounded-3xl focus:ring-2 focus:ring-lightblue-400 focus:border-lightblue-400 outline-none transition-all duration-200 text-gray-900"
               placeholder="Enter school name"
             />
             
             {showSchoolSuggestions && filteredSchools.length > 0 && (
-              <div className="absolute z-10 w-full mt-2 bg-white border-2 border-sage-200 rounded-3xl shadow-lg max-h-48 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-2 bg-white border-2 border-lightblue-200 rounded-3xl shadow-lg max-h-48 overflow-y-auto">
                 {filteredSchools.map((school) => (
                   <button
                     key={school}
                     type="button"
                     onClick={() => handleSchoolSelect(school)}
-                    className="w-full text-left px-5 py-3 hover:bg-sage-50 transition-colors first:rounded-t-3xl last:rounded-b-3xl"
+                    className="w-full text-left px-5 py-3 hover:bg-lightblue-50 transition-colors first:rounded-t-3xl last:rounded-b-3xl"
                   >
                     {school}
                   </button>
@@ -400,18 +400,18 @@ export default function AddPersonModal({
             </label>
             <div className="flex flex-wrap gap-3 mb-4">
               {availableProfessions.map((profession) => (
-                <button
-                  key={profession}
-                  type="button"
-                  onClick={() => toggleProfession(profession)}
-                  className={`px-5 py-2.5 rounded-full font-medium transition-all duration-200 transform hover:scale-105 ${
-                    selectedProfessions.includes(profession)
-                      ? 'bg-sage-500 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
-                  }`}
-                >
-                  {profession}
-                </button>
+                  <button
+                    key={profession}
+                    type="button"
+                    onClick={() => toggleProfession(profession)}
+                    className={`px-5 py-2.5 rounded-full font-medium transition-all duration-200 transform hover:scale-105 ${
+                      selectedProfessions.includes(profession)
+                        ? 'bg-lightblue-500 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+                    }`}
+                  >
+                    {profession}
+                  </button>
               ))}
             </div>
 
@@ -443,7 +443,7 @@ export default function AddPersonModal({
                 <button
                   type="button"
                   onClick={handleAddNewProfession}
-                  className="px-5 py-2.5 bg-sage-500 text-white rounded-3xl hover:bg-sage-600 transition-all duration-200 font-medium shadow-md"
+                  className="px-5 py-2.5 bg-lightblue-500 text-white rounded-3xl hover:bg-lightblue-600 transition-all duration-200 font-medium shadow-md"
                 >
                   Add
                 </button>
@@ -463,13 +463,13 @@ export default function AddPersonModal({
 
           {/* Selected Professions Display */}
           {selectedProfessions.length > 0 && (
-            <div className="bg-sage-50 p-5 rounded-3xl border border-sage-200">
+            <div className="bg-lightblue-50 p-5 rounded-3xl border border-lightblue-200">
               <p className="text-sm font-semibold text-gray-700 mb-3">Selected Professions:</p>
               <div className="flex flex-wrap gap-2">
                 {selectedProfessions.map((profession) => (
                   <span
                     key={profession}
-                    className="px-4 py-2 bg-white text-gray-800 rounded-full text-sm font-medium shadow-sm border border-sage-200"
+                    className="px-4 py-2 bg-white text-gray-800 rounded-full text-sm font-medium shadow-sm border border-lightblue-200"
                   >
                     {profession}
                   </span>
